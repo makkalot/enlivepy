@@ -432,8 +432,18 @@ def do(*tfns):
     return _do
 
 
-def emit(node, pretty_print=True):
-    return etree.tostring(node, pretty_print=pretty_print)
+def emit(nodes, pretty_print=True, first=False):
+    if not isinstance(nodes, list):
+        nodes = [nodes]
+
+    if first:
+        return etree.tostring(nodes[0], pretty_print=pretty_print)
+
+    res = ""
+    for n in nodes:
+        res = "\n".join([res, etree.tostring(n, pretty_print=pretty_print)])
+
+    return res
 
 
 def move(src_select, dest_select, combiner):
