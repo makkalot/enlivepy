@@ -1,4 +1,5 @@
 from lxml.html import builder as E
+from lxml.html import fromstring
 
 from .template import *
 

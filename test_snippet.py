@@ -2,7 +2,7 @@
 Tests for snippets and template structures
 """
 
-from .snippet import sniptest, StringSnippet, snippet, snippet_from_str
+from .snippet import sniptest, StringSnippet, snippet, snippet_from_str, Template, StringTemplate
 from .template import *
 
 HTML_DIV = """
@@ -129,5 +129,85 @@ def test_snippet_fn():
     nodes = transform_header(heading="custom_header",
                              url_maps=navigation)
 
-    print emit(nodes)
+    #lets check some content
+    h1_node = nodes[0].find("h1")
+    assert h1_node.text == "custom_header"
+
+    #check the navigation links
+    ul_node = nodes[0].find("ul")
+    assert len(ul_node) == len(navigation)
+
+    for i, li in enumerate(ul_node):
+        assert li.get("href") == navigation[i]["href"]
+        assert li.text == navigation[i]["content"]
+
+
+    #print emit(nodes)
+
+
+BASE_HTML_LAYOUT = """
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div class="content">
+        Lorem opsum
+    </div>
+  </body>
+</html>
+"""
+
+
+
+class SiteTemplate(StringTemplate):
+    """
+    Simple template
+    """
+
+    def transform(self, nodes, *args, **kwargs):
+        """
+        The transformation part is here
+        :param nodes:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        header = kwargs.get("header")
+        if not header:
+            raise Exception("missing header")
+
+        cnt = kwargs.get("content")
+        if not cnt:
+            raise Exception("missing content")
+
+        at(nodes,
+           "body", prepend(header),
+           "div.content", content(cnt))
+
+        return nodes
+
+
+def test_site_template():
+    navigation = [
+                   {"href":"/home/", "content":"Home"},
+                   {"href":"/about/", "content":"About"},
+                   {"href":"/projects/", "content":"Projects"}
+    ]
+
+    header = transform_header(heading="custom_header",
+                              url_maps=navigation)
+
+    t = SiteTemplate(template=BASE_HTML_LAYOUT)
+    template_node = t(header=header,
+                      content="dynamic_content")
+
+    #print(template_node)
+
+    body_tag = template_node.find(".//body")
+    header_tag = body_tag[0]
+    div_tag = body_tag[1]
+
+    assert header[0] == header_tag
+    assert div_tag.tag == "div"
+    assert div_tag.text == "dynamic_content"
+    #print emit(template_node)
 
