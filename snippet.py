@@ -192,7 +192,7 @@ class Template(object):
     #the path of the template
     template = None
     #loader is the loader for loading resourcess
-    loader_cls = None
+    loader_cls = LxmlPathLoader
 
     def __init__(self, *args, **kwargs):
 
@@ -209,7 +209,7 @@ class Template(object):
         Override the loader logic
         :return:
         """
-        raise NotImplemented
+        raise NotImplemented()
 
 
 
@@ -253,3 +253,8 @@ class Template(object):
 
         return node
 
+
+
+class StringTemplate(Template):
+
+    loader_cls = StringLoader
