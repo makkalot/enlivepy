@@ -117,10 +117,6 @@ def clone_for(iter_obj, *transform_fns):
                     sel = pair[0]
                     # pair[1] is the transformer fn
                     transformer_fn = pair[1]
-
-                    #print "SEL : ", sel
-                    #print "CHECK : ",emit(tmp_node)
-
                     #we extract the real transformer from this
                     real_transform_fn = transformer_fn(obj)
                     at(tmp_node, sel, real_transform_fn)
