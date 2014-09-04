@@ -2,7 +2,7 @@
 Tests for snippets and template structures
 """
 
-from .snippet import sniptest, StringSnippet
+from .snippet import sniptest, StringSnippet, snippet, snippet_from_str
 from .template import *
 
 HTML_DIV = """
@@ -81,9 +81,8 @@ def test_header_snippet():
                    {"href":"/projects/", "content":"Projects"}
     ]
 
-    header_snippet = HeaderSnippet()
-    nodes = header_snippet(template=HEADER_SNIPPET,
-                           heading="custom_header",
+    header_snippet = HeaderSnippet(template=HEADER_SNIPPET)
+    nodes = header_snippet(heading="custom_header",
                            navigation=navigation)
 
     #lets check some content
@@ -97,3 +96,38 @@ def test_header_snippet():
     for i, li in enumerate(ul_node):
         assert li.get("href") == navigation[i]["href"]
         assert li.text == navigation[i]["content"]
+
+
+#@snippet("header.html", "header")
+#def transform_header(nodes, header_text=None):
+#    pass
+
+
+@snippet_from_str(HEADER_SNIPPET, "header")
+def transform_header(nodes, heading="default", url_maps=None):
+
+    at(nodes,
+       "h1", content(heading))
+
+    #now lets do the same thing for navigation
+    at(nodes,
+       "ul li", clone_for(url_maps,
+                          "li", lambda url: set_attr(href=url["href"]),
+                          "li", lambda url: content(url["content"])))
+
+    return nodes
+
+
+
+def test_snippet_fn():
+    navigation = [
+                   {"href":"/home/", "content":"Home"},
+                   {"href":"/about/", "content":"About"},
+                   {"href":"/projects/", "content":"Projects"}
+    ]
+
+    nodes = transform_header(heading="custom_header",
+                             url_maps=navigation)
+
+    print emit(nodes)
+
