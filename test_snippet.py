@@ -55,19 +55,45 @@ class HeaderSnippet(StringSnippet):
         if not heading:
             raise Exception("heading param missing")
 
+        url_maps = kwargs.get("navigation")
+        if not url_maps:
+            raise Exception("navigation is missing")
+
+
+
         at(nodes,
            "h1", content(heading))
 
         #now lets do the same thing for navigation
-        
+        at(nodes,
+           "ul li", clone_for(url_maps,
+                              "li", lambda url: set_attr(href=url["href"]),
+                              "li", lambda url: content(url["content"])))
 
         return nodes
 
 
 def test_header_snippet():
 
+    navigation = [
+                   {"href":"/home/", "content":"Home"},
+                   {"href":"/about/", "content":"About"},
+                   {"href":"/projects/", "content":"Projects"}
+    ]
+
     header_snippet = HeaderSnippet()
     nodes = header_snippet(template=HEADER_SNIPPET,
-                           heading="custom_header")
+                           heading="custom_header",
+                           navigation=navigation)
 
-    print emit(nodes)
+    #lets check some content
+    h1_node = nodes[0].find("h1")
+    assert h1_node.text == "custom_header"
+
+    #check the navigation links
+    ul_node = nodes[0].find("ul")
+    assert len(ul_node) == len(navigation)
+
+    for i, li in enumerate(ul_node):
+        assert li.get("href") == navigation[i]["href"]
+        assert li.text == navigation[i]["content"]
