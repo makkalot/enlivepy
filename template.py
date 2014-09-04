@@ -1,26 +1,10 @@
 from copy import deepcopy
-from lxml.html import fromstring
-from lxml import etree
 
+from utils import flatten
+
+from lxml import etree
 import lxml
 
-#@deftemplate("t2.hmtl")
-#def main_header(dom, hdr, para_txt, li_items):
-#    select("h1", content(hdr))
-#    select("div#d1 p", content(para_txt))
-#    select("div ul.l li", content(para_txt))
-
-
-#to transform some data returns back the dom again
-#at(dom, "div ul.l", (content ["one", "two"]))
-
-#like at but a little bit different
-#sniptest("<html><body><span>Hello </span>", "span", append("World"))
-
-
-#@defsnippet()
-#def header_section(dom):
-#    pass
 
 def select(node, selector_str):
     """
@@ -150,6 +134,8 @@ def content(*args, **kwargs):
 
     TODO more good str operations to e added
     """
+    args = flatten(args)
+
     def _content(node):
         #first should remove its children
         for ch in node:
@@ -176,6 +162,9 @@ def content(*args, **kwargs):
 
     return _content
 
+#need a fn flatten
+#which will get a list and flatten it recursively
+
 
 def append(*args):
     """
@@ -186,6 +175,8 @@ def append(*args):
 
     TODO more good str operations to e added
     """
+    args = flatten(args)
+
     def _append(node):
         prev = None
         for arg in args:
@@ -197,7 +188,8 @@ def append(*args):
             elif isinstance(arg, lxml.etree._Element):
                 node.append(arg)
             else:
-                raise Exception("invalid type passed to content")
+                print "ARG : ",type(arg)
+                raise Exception("invalid type passed to append")
 
             prev = arg
 
@@ -242,6 +234,7 @@ def prepend(*args):
 
     TODO more good str operations to e added
     """
+    args = flatten(args)
     return PrependTransform(*args)
 
 
@@ -251,6 +244,7 @@ def after(*args):
     :param args:
     :return:
     """
+    args = flatten(args)
 
     def _after(node):
         parent = node.getparent()
@@ -313,6 +307,7 @@ def before(*args):
     :param args:
     :return:
     """
+    args = flatten(args)
     return BeforeTranform(*args)
 
 
@@ -328,6 +323,7 @@ def substitute(*args):
     :param args:
     :return:
     """
+    args = flatten(args)
     return SubstituteTransform(*args)
 
 
@@ -385,6 +381,7 @@ def set_attr(**attrs):
     return _set_attr
 
 def remove_attr(*attrs):
+
     def _remove_attr(node):
         attributes = node.attrib
         for a in attrs:
