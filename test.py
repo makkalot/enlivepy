@@ -100,6 +100,31 @@ def test_clone_for():
         assert td.text.strip() == str(i)
 
 
+def test_clone_for_lambda():
+    node = get_parse_node(HTML_STR)
+
+    #lets say now you want to duplicate the trs
+    transform(node,
+              "table tr",
+              clone_for(range(1,4),
+                        "tr > td", lambda i:content(str(i)),
+                        "tr", lambda i: add_class("trclass_"+str(i)),
+                        "tr", lambda i: remove_class("per_animal_row")))
+
+    #you have done the transform lets emit it now
+    #now check the contents of what was done
+    table_node = node.find(".//table")
+    #we should have 3 trs
+    assert len(table_node) == 3
+
+    for row, tr in enumerate(table_node):
+        assert len(tr) == 1
+        assert tr.tag == "tr"
+        assert tr.get("class") == "trclass_{}".format(str(row+1))
+
+        for td in tr:
+            assert td.text.strip() == str(row+1)
+
 
 
 def test_prepend():

@@ -92,21 +92,43 @@ def at(node_nodes, *args):
 
 
 
-def clone_for(iter_obj, transform_fn):
+def clone_for(iter_obj, *transform_fns):
 
     def _clone_for(node):
         parent = node.getparent()
         if not etree.iselement(parent):
-            raise Exception("Can not use after on a root element")
+            raise Exception("Can not use clone-for on a root element")
 
         results = []
 
-        for obj in iter_obj:
-            real_transform_fn = transform_fn(obj)
-            tmp_node = deepcopy(node)
-            tmp_node = real_transform_fn(tmp_node)
+        if len(transform_fns) == 1:
+            transformer_fn = transform_fns[0]
+            for obj in iter_obj:
+                real_transform_fn = transformer_fn(obj)
+                tmp_node = deepcopy(node)
+                tmp_node = real_transform_fn(tmp_node)
 
-            results.append(tmp_node)
+                results.append(tmp_node)
+        elif len(transform_fns) % 2 == 0:
+            for obj in iter_obj:
+                tmp_node = deepcopy(node)
+                for pair in zip(transform_fns[::2], transform_fns[1::2]):
+                    # pair[0] is the selection
+                    sel = pair[0]
+                    # pair[1] is the transformer fn
+                    transformer_fn = pair[1]
+
+                    #print "SEL : ", sel
+                    #print "CHECK : ",emit(tmp_node)
+
+                    #we extract the real transformer from this
+                    real_transform_fn = transformer_fn(obj)
+                    at(tmp_node, sel, real_transform_fn)
+
+                #finally append it to the finished list
+                results.append(tmp_node)
+        else:
+            raise Exception("Invalid parameter passed")
 
         #at this stage we should remove the real one and copy the new
         #ones on its place
