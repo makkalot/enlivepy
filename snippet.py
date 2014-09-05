@@ -124,12 +124,11 @@ class StringSnippet(Snippet):
 
 
 
-class DecoratorSnippet(Snippet):
+class DecoratorArgMixin(object):
 
     """
     Useful for passing the transformer from outside
     """
-
     def transform(self, nodes, *args, **kwargs):
 
         transform_fn = self.init_kwargs.get("transform_fn")
@@ -139,9 +138,11 @@ class DecoratorSnippet(Snippet):
         return transform_fn(nodes, *args, **kwargs)
 
 
+class DecoratedSnippet(DecoratorArgMixin, Snippet):
+    pass
 
-class DecoratedStringSnippet(DecoratorSnippet, StringSnippet):
 
+class DecoratedStringSnippet(DecoratorArgMixin, StringSnippet):
     pass
 
 
@@ -166,7 +167,7 @@ def snippet(path, selection):
 
     #that way we cache them for further usage !!!
     def _wrapper(f):
-        decorator_snippet = DecoratorSnippet(transform_fn=f,
+        decorator_snippet = DecoratedSnippet(transform_fn=f,
                                              template=path,
                                              sel=selection)
 
@@ -258,3 +259,34 @@ class Template(object):
 class StringTemplate(Template):
 
     loader_cls = StringLoader
+
+
+class DecoratedTemplate(DecoratorArgMixin, Template):
+    pass
+
+class DecoratedStringTemplate(DecoratorArgMixin, StringTemplate):
+    pass
+
+
+def template(path):
+
+    #that way we cache them for further usage !!!
+    def _wrapper(f):
+        decorator_template = DecoratedTemplate(transform_fn=f,
+                                                template=path)
+
+        return decorator_template
+
+    return _wrapper
+
+
+def template_from_str(path):
+
+    #that way we cache them for further usage !!!
+    def _wrapper(f):
+        decorator_template = DecoratedStringTemplate(transform_fn=f,
+                                                     template=path)
+
+        return decorator_template
+
+    return _wrapper

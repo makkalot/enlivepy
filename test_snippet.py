@@ -2,8 +2,9 @@
 Tests for snippets and template structures
 """
 
-from .snippet import sniptest, StringSnippet, snippet, snippet_from_str, Template, StringTemplate
+from .snippet import *
 from .template import *
+
 
 HTML_DIV = """
     <title>Some dummy title</title>
@@ -186,6 +187,17 @@ class SiteTemplate(StringTemplate):
         return nodes
 
 
+@template_from_str(BASE_HTML_LAYOUT)
+def base_template(node, header=None, cnt=None):
+
+    at(node,
+       "body", prepend(header),
+       "div.content", content(cnt))
+
+    return node
+
+
+
 def test_site_template():
     navigation = [
                    {"href":"/home/", "content":"Home"},
@@ -202,6 +214,30 @@ def test_site_template():
 
     #print(template_node)
 
+    body_tag = template_node.find(".//body")
+    header_tag = body_tag[0]
+    div_tag = body_tag[1]
+
+    assert header[0] == header_tag
+    assert div_tag.tag == "div"
+    assert div_tag.text == "dynamic_content"
+    #print emit(template_node)
+
+
+def test_site_template_from_dec():
+    navigation = [
+                   {"href":"/home/", "content":"Home"},
+                   {"href":"/about/", "content":"About"},
+                   {"href":"/projects/", "content":"Projects"}
+    ]
+
+    header = transform_header(heading="custom_header",
+                              url_maps=navigation)
+
+    template_node = base_template(header=header,
+                                  cnt="dynamic_content")
+
+    #print(template_node)
     body_tag = template_node.find(".//body")
     header_tag = body_tag[0]
     div_tag = body_tag[1]
