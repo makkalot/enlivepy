@@ -13,3 +13,8 @@ class HomePageView(TemplateView):
         context["content"] = "Dynamic Header"
 
         return context
+
+
+class TodoIndexView(TemplateView):
+
+    template_name = "todo_index"
