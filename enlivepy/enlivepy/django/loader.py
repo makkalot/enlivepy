@@ -7,10 +7,9 @@ from django.template.loader import BaseLoader
 from django.template.loaders.app_directories import app_template_dirs
 from django.conf import settings
 
-from enlivepy.snippet import Template
+from enlivepy.snippet import Template, Snippet
 from enlivepy.template import emit
 from enlivepy.django.registry import registry
-
 
 #This loader is different from that below
 #this is for loading the .html files from system
@@ -52,6 +51,12 @@ class DjangoTemplate(Template):
         node = self.__call__(**context_dict)
         #emit the string representation
         return emit(node)
+
+
+class DjangoSnippet(Snippet):
+
+    loader_cls = DjangoDirPathLoader
+
 
 
 class EnlivepyLoader(BaseLoader):
