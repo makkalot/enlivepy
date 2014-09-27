@@ -6,18 +6,28 @@ from lxml import etree
 import lxml
 
 
-def select(node, selector_str):
+def select(node_nodes, selector_str):
     """
     Selector util
     :param node:
     :param selector_str:
     :return:
     """
-    found_node = node.cssselect(selector_str)
-    if not found_node:
-        raise Exception("{} not found in node ".format(selector_str))
 
-    return found_node
+    if not isinstance(node_nodes, list):
+        node_nodes = [node_nodes]
+
+    found_nodes = []
+
+    for node in node_nodes:
+        found_node = node.cssselect(selector_str)
+        if not found_node:
+            raise Exception("{} not found in node ".format(selector_str))
+
+        found_nodes.append(found_node)
+
+
+    return found_nodes[0] if len(found_nodes) == 1 else found_nodes
 
 #there will be some helper functions like content, append
 #wrap, set_attr, remove_attr
@@ -74,6 +84,20 @@ def at(node_nodes, *args):
     return node_nodes
 
 
+
+def snip_at(node_nodes, select_str, *args):
+    """
+    Simple util to do some transformation
+    and then return a part of it back
+    :param node_nodes:
+    :param select_str:
+    :param args:
+    :return:
+    """
+
+    #do your transformation here
+    at(node_nodes, *args)
+    return select(node_nodes, select_str)
 
 
 def clone_for(iter_obj, *transform_fns):
