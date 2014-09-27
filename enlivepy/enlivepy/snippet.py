@@ -192,7 +192,7 @@ class Template(object):
 
     #the path of the template
     template = None
-    #loader is the loader for loading resourcess
+    #loader is the loader for loading resources
     loader_cls = LxmlPathLoader
 
     def __init__(self, *args, **kwargs):
