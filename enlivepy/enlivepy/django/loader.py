@@ -42,7 +42,6 @@ class DjangoTemplate(Template):
         # flatten the Django Context into a single dictionary.
         context_dict = {}
 
-
         for d in context.dicts:
             #print "KEYS : ", d.keys()
             context_dict.update(d)
@@ -61,9 +60,7 @@ class DjangoSnippet(Snippet):
 
 class EnlivepyLoader(BaseLoader):
     is_usable = True
-
     env = registry
-
 
     def load_template(self, template_name, template_dirs=None):
         try:
