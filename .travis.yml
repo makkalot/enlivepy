@@ -1,6 +1,5 @@
 language: python
 python:
   - "2.7"
-  - "2.6"
 install: cd enlivepy && python setup.py install
-script: cd enlivepy && nosetests
+script: cd enlivepy && nosetests enlivepy/
