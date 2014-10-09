@@ -1,5 +1,5 @@
 language: python
 python:
   - "2.7"
-install: cd enlivepy && python setup.py install
+install: pip istall -r requirements.txt
 script: cd enlivepy && nosetests enlivepy/
