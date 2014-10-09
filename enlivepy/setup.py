@@ -19,7 +19,7 @@ setup(
     packages=['enlivepy','enlivepy.test'],
     url='https://github.com/makkalot/enlivepy',
     long_description=open('README.txt').read(),
-    install_requires=['lxml'],
+    install_requires=['lxml', 'cssselect'],
     test_suite='enlivepy.test',
     classifiers=[
         'Development Status :: 3 - Alpha',
