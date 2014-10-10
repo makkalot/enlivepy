@@ -1,14 +1,12 @@
 from functools import partial
-from urllib import urlencode
 from django.core.urlresolvers import reverse
-from django.template.defaulttags import csrf_token
 import os
 from lxml.html import builder as E
 
 
 from enlivepy.django.loader import DjangoTemplate, DjangoSnippet
 from enlivepy.django.registry import register
-from enlivepy.template import prepend, content, at, transform, set_attr, clone_for, select, snip_at, append, after, do
+from enlivepy.transformers import prepend, content, at, transform, set_attr, clone_for, select, snip_at, append, after, do
 
 
 class ContentTemplate(DjangoTemplate):
