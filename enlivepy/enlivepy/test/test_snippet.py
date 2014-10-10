@@ -4,6 +4,7 @@ Tests for snippets and template structures
 
 from enlivepy.snippet import *
 from enlivepy.template import *
+from enlivepy.transformers import *
 
 
 HTML_DIV = """

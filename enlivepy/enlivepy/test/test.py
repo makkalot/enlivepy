@@ -1,7 +1,7 @@
 from lxml.html import builder as E
 from lxml.html import fromstring
 
-from enlivepy.template import *
+from enlivepy.transformers import *
 
 
 HTML_STR = """

@@ -7,8 +7,9 @@ from django.template.loader import BaseLoader
 from django.template.loaders.app_directories import app_template_dirs
 from django.conf import settings
 
-from enlivepy.snippet import Template, Snippet
-from enlivepy.template import emit
+from enlivepy.template import Template
+from enlivepy.snippet import Snippet
+from enlivepy.transformers import emit
 from enlivepy.django.registry import registry
 
 #This loader is different from that below
