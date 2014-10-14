@@ -472,16 +472,16 @@ def do(*tfns):
     return _do
 
 
-def emit(nodes, pretty_print=True, first=False):
+def emit(nodes, pretty_print=False, first=False, method="html"):
     if not isinstance(nodes, list):
         nodes = [nodes]
 
     if first:
-        return etree.tostring(nodes[0], pretty_print=pretty_print)
+        return etree.tostring(nodes[0], pretty_print=pretty_print, method=method)
 
     res = ""
     for n in nodes:
-        res = "\n".join([res, etree.tostring(n, pretty_print=pretty_print)])
+        res = "".join([res, etree.tostring(n, pretty_print=pretty_print, method=method)])
 
     return res
 
