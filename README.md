@@ -288,4 +288,74 @@ And here is the usage :
 Transformations
 ----------------------
 
-To be continued ...
+A transformation is a function that returns either a node or collection of node.
+
+Enlivepy defines several helper functions:
+
+
+```python
+	
+	#Replaces the content of the element. Values can be nodes or collection of nodes.
+	content("xyz", node_a, "abc")
+
+	#Wraps selected node into the given tag
+	wrap("div")
+	#or
+	wrap("div", {"class":"foo"})
+
+	#Opposite to wrap, returns the content of the selected node
+	unwrap
+
+	#Sets given key value pairs as attributes for selected node
+	set_attr(**{"attr1": "val1", "attr2": "val2"})
+	
+	#Removes attribute(s) from selected node
+	remove_attr("attr1", "attr2")
+
+	#Adds class(es) to the selected node
+	add_class("foo", "bar")
+	
+	#Removes class(es) from the selected node
+	remove_class("foo", "bar")
+
+	#Chains (composes) several transformations. Applies functions from left to right.
+	do(transformation1, transformation2)
+
+	#Clones the selected node, applying transformations to it.
+	clone_for(items,  transformation)
+	
+	#or
+	clone_for(items,
+			  selector1 transformation1
+  			  selector2 transformation2)
+
+  	#Appends the values to the content of the selected element.
+	append("xyz", a-node, "abc")
+
+	#Prepends the values to the content of the selected element.
+	prepend("xyz", a-node, "abc")
+
+	#Inserts the values after the current selection (node or fragment).
+	after("xyz", a-node, "abc")
+
+	#Inserts the values before the current selection (node or fragment).
+	before("xyz", a-node, "abc")
+
+	#Replaces the current selection (node or fragment).
+	substitute("xyz", a-node, "abc")
+	
+```
+
+
+Differences from Original Implementation
+----------------------
+
+The biggest difference is immutability. In original __enlive__ when you do some transformation
+on a node what you get back is a copy of the node. This is an advantage __Clojure__ has because 
+of its persistent data structures. We can have similar immutability model on Enlivepy but we need to do __deepcopy__ on every transformation which would have a negative performanve impact.
+Other than that we have a few missing peices : 
+
+- move transformations (tobe added)
+- beautifu dsl (Python doesn't have macros :| )
+- ${vars} subtitution (tobe added)
+
