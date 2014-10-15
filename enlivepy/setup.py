@@ -12,7 +12,7 @@ from os.path import join, dirname
 
 setup(
     name="enlivepy",
-    version='0.1.2',
+    version='0.1.3',
     description='Html Tranformation Library',
     author='makkalot',
     author_email='makkalot@gmail.com',
