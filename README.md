@@ -9,6 +9,15 @@ the fun stuff with lxml under the hood. It is not a templating library it is way
 that :) 
 
 
+Installation
+-----------------
+
+To install the latest stable version :
+
+    pip install enlivepy
+
+
+
 Transformation Concept
 -----------------------
 Enlivepy is built on concept called transformation chaining. The genereal idea is you select some html nodes
