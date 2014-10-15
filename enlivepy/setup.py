@@ -18,7 +18,7 @@ setup(
     author_email='makkalot@gmail.com',
     packages=['enlivepy','enlivepy.test'],
     url='https://github.com/makkalot/enlivepy',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     install_requires=['lxml', 'cssselect'],
     test_suite='enlivepy.test',
     classifiers=[
