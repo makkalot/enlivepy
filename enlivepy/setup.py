@@ -16,7 +16,7 @@ setup(
     description='Html Tranformation Library',
     author='makkalot',
     author_email='makkalot@gmail.com',
-    packages=['enlivepy','enlivepy.test'],
+    packages=['enlivepy', 'enlivepy.django', 'enlivepy.test'],
     url='https://github.com/makkalot/enlivepy',
     install_requires=['lxml', 'cssselect'],
     test_suite='enlivepy.test',
